@@ -55,4 +55,22 @@ public class User extends PanacheEntity {
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     public List<Pet> pets = new ArrayList<>();
+
+    public static User findByEmail(String email) {
+        return  find("email", email).firstResult();
+    }
+
+    public static List<User> listActive() {
+        return list("active", true);
+    }
+
+    public void addPet(Pet pet) {
+        pets.add(pet);
+        pet.owner = this;
+    }
+
+    public void removePet(Pet pet) {
+        pets.remove(pet);
+        pet.owner = null;
+    }
 }

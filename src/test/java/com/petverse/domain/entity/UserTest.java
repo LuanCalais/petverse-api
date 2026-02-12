@@ -54,4 +54,51 @@ class UserTest {
         assertEquals("+5511999999999", user.phone);
         assertEquals("Amante de cachorros e café", user.bio);
     }
+
+    @Test
+    @DisplayName("Should fail when name is blank")
+    void shouldFailWhenNameIsBlank() {
+        User user = new User();
+        user.name = "";
+        user.email = "fulanoDeTal@example.com";
+        user.password = "senha12345";
+
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().equals("Name is required")));
+    }
+
+    @Test
+    @DisplayName("Should fail when email is blank")
+    void shouldFailWhenEmailIsBlank() {
+        User user = new User();
+        user.name = "Fulano de Tal";
+        user.email = "";
+        user.password = "senha12345";
+
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().equals("Email is required")));
+    }
+
+    @Test
+    @DisplayName("Should add pet to user's collection")
+    void shouldAddPetToUser() {
+        User user = new User();
+        user.name = "Fulano de Tal";
+        user.email = "fulanoDeTal@example.com";
+        user.password = "senha12345";
+
+        Pet pet = new Pet();
+        pet.name = "Colin Firth";
+
+        user.addPet(pet);
+
+        assertEquals(1, user.pets.size());
+        assertTrue(user.pets.contains(pet));
+        assertEquals(user, pet.owner, "Pet deve apontar para o user (relacionamento bidirecional)");
+    }
+
 }

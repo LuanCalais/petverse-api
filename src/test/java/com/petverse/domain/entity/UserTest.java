@@ -7,7 +7,7 @@ import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
+import static org.junit.jupiter.api.Assertions.*;
 import java.util.Set;
 
 @DisplayName("User Entity Unit Tests")
@@ -26,13 +26,32 @@ class UserTest {
         User user = new User();
         user.name = "Fulano de Tal";
         user.email = "fulanoDeTal@example.com";
-        user.password = "12345";
+        user.password = "senha12345";
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-//        assertTrue(violations.isEmpty(), "User válido não deveria ter erros de validação");
-//        assertEquals("Fulano de Tal", user.name);
-//        assertEquals("assertEquals", user.email);
-//        assertTrue(user.active);
-//        assertNotNull(user.pets);
+
+        assertTrue(violations.isEmpty(), "User válido não deveria ter erros de validação");
+        assertEquals("Fulano de Tal", user.name);
+        assertEquals("fulanoDeTal@example.com", user.email);
+        assertTrue(user.active);
+        assertNotNull(user.pets);
+    }
+
+    @Test
+    @DisplayName("Should create user with optional fields")
+    void shouldCreateValidUserWithOptionalFields() {
+        User user = new User();
+        user.name = "Fulano de Tal";
+        user.email = "fulanoDeTal@example.com";
+        user.password = "senha12345";
+        user.phone = "+5511999999999";
+        user.bio = "Amante de cachorros e café";
+        user.profileImageUrl = "https://example.com/photo.jpg";
+
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+
+        assertTrue(violations.isEmpty());
+        assertEquals("+5511999999999", user.phone);
+        assertEquals("Amante de cachorros e café", user.bio);
     }
 }

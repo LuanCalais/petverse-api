@@ -5,7 +5,9 @@ import com.petverse.domain.enums.PetSize;
 import com.petverse.domain.enums.PetSpecies;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

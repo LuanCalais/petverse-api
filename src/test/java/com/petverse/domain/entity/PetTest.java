@@ -82,5 +82,4 @@ class PetTest {
         assertFalse(violations.isEmpty());
         assertTrue(violations.stream().anyMatch(v -> v.getMessage().equals("Owner is required")));
     }
-
 }

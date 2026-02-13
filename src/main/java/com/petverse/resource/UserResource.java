@@ -2,6 +2,7 @@ package com.petverse.resource;
 
 import com.petverse.domain.dto.UserCreateDTO;
 import com.petverse.domain.dto.UserResponseDTO;
+import com.petverse.domain.dto.UserUpdateDTO;
 import com.petverse.domain.service.UserService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -24,9 +25,28 @@ public class UserResource {
         return Response.status(Response.Status.CREATED).entity(response).build();
     }
 
+    @PUT
+    @Path("/{id}")
+    public UserResponseDTO update(@PathParam("id") Long id, @Valid UserUpdateDTO dto) {
+        return userService.update(id, dto);
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response delete(@PathParam("id") Long id) {
+        userService.delete(id);
+        return Response.noContent().build();
+    }
+
     @GET
     public List<UserResponseDTO> listAll() {
         return userService.listAll();
+    }
+
+    @GET
+    @Path("/{id}")
+    public UserResponseDTO findById(@PathParam("id") String id) {
+        return userService.findById(id);
     }
 
     @GET

@@ -5,6 +5,7 @@ import com.petverse.domain.dto.UserResponseDTO;
 import com.petverse.domain.dto.UserUpdateDTO;
 import com.petverse.domain.entity.User;
 import com.petverse.exception.BusinessException;
+import com.petverse.exception.ResourceNotFoundException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
@@ -17,7 +18,7 @@ public class UserService {
     public UserResponseDTO create(UserCreateDTO dto) {
         User existingUser = User.findByEmail(dto.email);
         if (existingUser != null) {
-            throw new BusinessException("User already exists");
+            throw new BusinessException("User already exists with this e-mail");
         }
 
         User newUser = new User();
@@ -73,10 +74,10 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public UserResponseDTO findById(String id) {
+    public UserResponseDTO findById(Long id) {
         User user = User.findById(id);
-        if (user == null) {
-            throw new BusinessException("User not found with id: " + id);
+        if (user == null || !user.active) {
+            throw new ResourceNotFoundException("User not found with id: " + id);
         }
         return new UserResponseDTO(user);
     }

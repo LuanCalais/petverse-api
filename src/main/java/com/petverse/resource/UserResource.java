@@ -45,7 +45,7 @@ public class UserResource {
 
     @GET
     @Path("/{id}")
-    public UserResponseDTO findById(@PathParam("id") String id) {
+    public UserResponseDTO findById(@PathParam("id") Long id) {
         return userService.findById(id);
     }
 

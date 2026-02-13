@@ -1,14 +1,15 @@
 package com.petverse.domain.entity;
 
+
 import com.petverse.domain.enums.PetGender;
 import com.petverse.domain.enums.PetSize;
 import com.petverse.domain.enums.PetSpecies;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;

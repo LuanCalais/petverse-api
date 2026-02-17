@@ -13,7 +13,7 @@ public class PetCreateDTO {
     @Size(min = 2, max = 50, message = "Pet name must be between 2 and 50 characters")
     public String name;
 
-    @NotBlank(message = "Species is required")
+    @NotNull(message = "Species is required")
     public PetSpecies species;
 
     @Size(max = 50, message = "Breed must not exceed 50 characters")

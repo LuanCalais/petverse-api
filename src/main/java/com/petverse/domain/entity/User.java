@@ -29,7 +29,7 @@ public class User extends PanacheEntity {
     @NotBlank(message = "Password is required")
     @Size(min = 8, message = "Password must be at least 8 characters")
     @Column(nullable = false)
-    public  String password;
+    public String password;
 
     @Pattern(regexp = "^\\+?[1-9]\\d{1,14}$|^$", message = "Phone must be valid")
     @Column(length = 20)
@@ -50,14 +50,14 @@ public class User extends PanacheEntity {
     public LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false,  updatable = true)
-    public  LocalDateTime updatedAt;
+    @Column(name = "updated_at", nullable = false, updatable = true)
+    public LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     public List<Pet> pets = new ArrayList<>();
 
     public static User findByEmail(String email) {
-        return  find("email", email).firstResult();
+        return find("email", email).firstResult();
     }
 
     public static List<User> listActive() {

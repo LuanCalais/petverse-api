@@ -77,6 +77,30 @@ public class PetServiceTest {
     }
 
     @Test
+    @DisplayName("Should find user by ID")
+    void shouldFindUserById() {
+        PetCreateDTO dto = new PetCreateDTO();
+        dto.name = "Pedro o gato";
+        dto.ownerId = ownerId;
+        dto.species = PetSpecies.CAT;
+        dto.birthDate = LocalDate.parse("2020-05-15");
+        dto.breed = "Fofurinho";
+        dto.gender = PetGender.MALE;
+        dto.size = PetSize.EXTRA_LARGE;
+        dto.weight = 32.5;
+        dto.bio = "Sou um cachorro muito fofo e brincalhão";
+        dto.profileImageUrl = "https://example.com/photos/rex.jpg";
+        dto.microchipNumber = "123456789ABC";
+
+        PetResponseDTO created = petService.create(dto);
+        PetResponseDTO founded = petService.findById(created.id);
+
+        assertEquals(created.id, founded.id);
+        assertEquals(created.name, founded.name);
+        assertEquals(created.species, founded.species);
+    }
+
+    @Test
     @DisplayName("Shoul create pet with minimal fields")
     void shouldCreatePetWithMinimalFields() {
         PetCreateDTO dto = new PetCreateDTO();
@@ -107,5 +131,17 @@ public class PetServiceTest {
         });
 
         assertEquals("Owner not found with id: " + dto.ownerId, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should throw exception when pet dos not exist")
+    void shouldThrowExceptionWhenOwnerPetNotExist() {
+        Long id = 999L;
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            petService.findById(id);
+        });
+
+        assertEquals("Pet not found with id: " + id, exception.getMessage());
     }
 }

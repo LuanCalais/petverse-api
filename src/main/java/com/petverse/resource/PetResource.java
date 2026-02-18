@@ -26,6 +26,12 @@ public class PetResource {
     }
 
     @GET
+    @Path("/{id}")
+    public PetResponseDTO findById(@PathParam("id") Long id) {
+        return petService.findById(id);
+    }
+
+    @GET
     public List<PetResponseDTO> listAll() {
         return petService.listAll();
     }

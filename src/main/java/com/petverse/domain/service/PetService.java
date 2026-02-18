@@ -54,4 +54,12 @@ public class PetService {
                 .collect(Collectors.toList());
     }
 
+    public PetResponseDTO findById(Long id) {
+        Pet pet = Pet.findById(id);
+        if (pet == null || !pet.active) {
+            throw new ResourceNotFoundException("Pet not found with id: " + id);
+        }
+        return new PetResponseDTO(pet);
+    }
+
 }

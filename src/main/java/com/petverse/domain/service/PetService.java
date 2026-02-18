@@ -88,6 +88,18 @@ public class PetService {
         return new PetResponseDTO(pet);
     }
 
+    @Transactional
+    public void delete(Long id) {
+        Pet pet = Pet.findById(id);
+
+        if (pet == null || !pet.active) {
+            throw new ResourceNotFoundException("Pet not found with id: " + id);
+        }
+
+        pet.active = false;
+    }
+
+
     public List<PetResponseDTO> listAll() {
         return Pet.listActive()
                 .stream()

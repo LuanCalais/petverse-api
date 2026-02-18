@@ -177,27 +177,26 @@ public class PetServiceTest {
         assertNotEquals(created.weight, response.weight);
     }
 
+    @Test
+    @DisplayName("Should thrown exception when pet in soft deleted")
+    void shouldThrowExceptionWhenPetNotFoundInSoftDeletePet() {
+        PetCreateDTO createDTO = createMinimalPet();
+        PetResponseDTO created = petService.create(createDTO);
+
+        petService.delete(created.id);
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            petService.findById(created.id);
+        });
+
+        assertEquals("Pet not found with id: " + created.id, exception.getMessage());
+    }
+
     private PetCreateDTO createMinimalPet() {
         PetCreateDTO dto = new PetCreateDTO();
         dto.name = "Pedro o gato";
         dto.species = PetSpecies.CAT;
         dto.gender = PetGender.MALE;
-        dto.ownerId = ownerId;
-        return dto;
-    }
-
-    private PetCreateDTO createCompletePet() {
-        PetCreateDTO dto = new PetCreateDTO();
-        dto.name = "Rex Completo";
-        dto.species = PetSpecies.DOG;
-        dto.breed = "Labrador";
-        dto.gender = PetGender.MALE;
-        dto.size = PetSize.LARGE;
-        dto.birthDate = LocalDate.of(2020, 5, 15);
-        dto.weight = 32.5;
-        dto.bio = "Cachorro muito fofo e brincalhão";
-        dto.profileImageUrl = "https://example.com/photos/rex.jpg";
-        dto.microchipNumber = "123456789ABC";
         dto.ownerId = ownerId;
         return dto;
     }

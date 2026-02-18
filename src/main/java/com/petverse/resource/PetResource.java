@@ -32,6 +32,13 @@ public class PetResource {
         return petService.update(id, dto);
     }
 
+    @DELETE
+    @Path("/{id}")
+    public Response delete(@PathParam("id") Long id) {
+        petService.delete(id);
+        return Response.noContent().build();
+    }
+
     @GET
     @Path("/{id}")
     public PetResponseDTO findById(@PathParam("id") Long id) {

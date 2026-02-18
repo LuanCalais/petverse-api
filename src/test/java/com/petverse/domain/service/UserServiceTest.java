@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
@@ -61,7 +62,7 @@ public class UserServiceTest {
         dto2.bio = "Amante de cachorros";
 
         BusinessException exception = assertThrows(BusinessException.class, () -> {
-           userService.create(dto2);
+            userService.create(dto2);
         });
 
         assertEquals("User already exists with this e-mail", exception.getMessage());
@@ -115,8 +116,8 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Should delete user (soft delete)")
-    void shouldSoftDeleteUser() {
+    @DisplayName("Should thrown exception when user not found in soft delete")
+    void shouldThrowExceptionWhenUserNotFoundInSoftDeleteUser() {
         UserCreateDTO dto = new UserCreateDTO();
         dto.name = "Fulano de tal";
         dto.email = "fulanoDeTal@email.com";
@@ -131,5 +132,6 @@ public class UserServiceTest {
             userService.findById(created.id);
         });
 
-        assertEquals("User not found with id: " + created.id, exception.getMessage());    }
+        assertEquals("User not found with id: " + created.id, exception.getMessage());
+    }
 }

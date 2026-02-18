@@ -2,6 +2,7 @@ package com.petverse.resource;
 
 import com.petverse.domain.dto.PetCreateDTO;
 import com.petverse.domain.dto.PetResponseDTO;
+import com.petverse.domain.dto.pet.PetUpdateDTO;
 import com.petverse.domain.service.PetService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -23,6 +24,12 @@ public class PetResource {
     public Response create(@Valid PetCreateDTO dto) {
         PetResponseDTO response = petService.create(dto);
         return Response.status(Response.Status.CREATED).entity(response).build();
+    }
+
+    @PUT
+    @Path("/{id}")
+    public PetResponseDTO update(@PathParam("id") Long id, @Valid PetUpdateDTO dto) {
+        return petService.update(id, dto);
     }
 
     @GET

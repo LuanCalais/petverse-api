@@ -2,6 +2,7 @@ package com.petverse.domain.service;
 
 import com.petverse.domain.dto.PetCreateDTO;
 import com.petverse.domain.dto.PetResponseDTO;
+import com.petverse.domain.dto.pet.PetUpdateDTO;
 import com.petverse.domain.entity.Pet;
 import com.petverse.domain.entity.User;
 import com.petverse.domain.enums.PetGender;
@@ -77,8 +78,8 @@ public class PetServiceTest {
     }
 
     @Test
-    @DisplayName("Should find user by ID")
-    void shouldFindUserById() {
+    @DisplayName("Should find pet by ID")
+    void shouldFindPetById() {
         PetCreateDTO dto = new PetCreateDTO();
         dto.name = "Pedro o gato";
         dto.ownerId = ownerId;
@@ -101,7 +102,7 @@ public class PetServiceTest {
     }
 
     @Test
-    @DisplayName("Shoul create pet with minimal fields")
+    @DisplayName("Should create pet with minimal fields")
     void shouldCreatePetWithMinimalFields() {
         PetCreateDTO dto = new PetCreateDTO();
         dto.name = "Pedro o gato";
@@ -144,4 +145,69 @@ public class PetServiceTest {
 
         assertEquals("Pet not found with id: " + id, exception.getMessage());
     }
+
+    @Test
+    @DisplayName("Should throw exception when pet dos not exist on update")
+    void shouldThrowExceptionWhenOwnerPetNotExistOnUpdate() {
+        final Long testId = 9999L;
+        PetUpdateDTO dto = createUpdateDTO();
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            petService.update(testId, dto);
+        });
+
+        assertEquals("Pet not found with id: " + testId, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should update pet successfully")
+    void shouldUpdatePetSuccessfully() {
+        PetCreateDTO createDTO = createMinimalPet();
+        PetResponseDTO created = petService.create(createDTO);
+
+        PetUpdateDTO updateDTO = createUpdateDTO();
+
+        PetResponseDTO response = petService.update(created.id, updateDTO);
+
+        assertEquals(created.id, response.id);
+        assertEquals("Nome Atualizado", response.name);
+        assertEquals("Bio atualizada para teste", response.bio);
+        assertNotEquals(created.name, response.name);
+        assertNotEquals(created.bio, response.bio);
+        assertNotEquals(created.weight, response.weight);
+    }
+
+    private PetCreateDTO createMinimalPet() {
+        PetCreateDTO dto = new PetCreateDTO();
+        dto.name = "Pedro o gato";
+        dto.species = PetSpecies.CAT;
+        dto.gender = PetGender.MALE;
+        dto.ownerId = ownerId;
+        return dto;
+    }
+
+    private PetCreateDTO createCompletePet() {
+        PetCreateDTO dto = new PetCreateDTO();
+        dto.name = "Rex Completo";
+        dto.species = PetSpecies.DOG;
+        dto.breed = "Labrador";
+        dto.gender = PetGender.MALE;
+        dto.size = PetSize.LARGE;
+        dto.birthDate = LocalDate.of(2020, 5, 15);
+        dto.weight = 32.5;
+        dto.bio = "Cachorro muito fofo e brincalhão";
+        dto.profileImageUrl = "https://example.com/photos/rex.jpg";
+        dto.microchipNumber = "123456789ABC";
+        dto.ownerId = ownerId;
+        return dto;
+    }
+
+    private PetUpdateDTO createUpdateDTO() {
+        PetUpdateDTO dto = new PetUpdateDTO();
+        dto.name = "Nome Atualizado";
+        dto.bio = "Bio atualizada para teste";
+        dto.weight = 25.0;
+        return dto;
+    }
+
 }

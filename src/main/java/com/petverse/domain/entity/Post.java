@@ -1,5 +1,6 @@
 package com.petverse.domain.entity;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +12,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Post {
+@Entity
+@Table(name = "posts")
+public class Post extends PanacheEntity {
 
     @NotBlank(message = "Post content is required")
     @Size(min = 5, max = 200, message = "Post content must be between 5 and 200 characters")
@@ -31,6 +34,9 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "pet_id")
     )
     public List<Pet> pets = new ArrayList<>();
+
+    @Column(nullable = false)
+    public Boolean active = true;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

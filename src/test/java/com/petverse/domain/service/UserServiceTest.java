@@ -3,6 +3,8 @@ package com.petverse.domain.service;
 import com.petverse.domain.dto.UserCreateDTO;
 import com.petverse.domain.dto.UserResponseDTO;
 import com.petverse.domain.dto.UserUpdateDTO;
+import com.petverse.domain.entity.Pet;
+import com.petverse.domain.entity.Post;
 import com.petverse.domain.entity.User;
 import com.petverse.exception.BusinessException;
 import com.petverse.exception.ResourceNotFoundException;
@@ -24,6 +26,8 @@ public class UserServiceTest {
     @BeforeEach
     @Transactional
     void cleanDatabase() {
+        Post.deleteAll();
+        Pet.deleteAll();
         User.deleteAll();
     }
 

@@ -135,8 +135,8 @@ public class PetServiceTest {
     }
 
     @Test
-    @DisplayName("Should throw exception when pet dos not exist")
-    void shouldThrowExceptionWhenOwnerPetNotExist() {
+    @DisplayName("Should throw exception when pet does not exist")
+    void shouldThrowExceptionWhenPetNotExist() {
         Long id = 999L;
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
@@ -148,7 +148,7 @@ public class PetServiceTest {
 
     @Test
     @DisplayName("Should throw exception when pet dos not exist on update")
-    void shouldThrowExceptionWhenOwnerPetNotExistOnUpdate() {
+    void shouldThrowExceptionWhenPetNotExistOnUpdate() {
         final Long testId = 9999L;
         PetUpdateDTO dto = createUpdateDTO();
 
@@ -178,7 +178,7 @@ public class PetServiceTest {
     }
 
     @Test
-    @DisplayName("Should thrown exception when pet in soft deleted")
+    @DisplayName("Should thrown exception when pet is not found in soft deleted")
     void shouldThrowExceptionWhenPetNotFoundInSoftDeletePet() {
         PetCreateDTO createDTO = createMinimalPet();
         PetResponseDTO created = petService.create(createDTO);

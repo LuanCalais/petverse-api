@@ -18,5 +18,8 @@ public class PostUpdateDTO {
     public User owner;
 
     @NotNull(message = "Pet is required")
+    public List<Long> petIds = new ArrayList<>();
+
+    @NotNull(message = "Pet is required")
     public List<Pet> pets = new ArrayList<>();
 }

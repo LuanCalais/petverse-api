@@ -45,4 +45,8 @@ public class Post extends PanacheEntity {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false, updatable = true)
     public LocalDateTime updatedAt;
+
+    public static List<Post> listActive() {
+        return list("active", true);
+    }
 }

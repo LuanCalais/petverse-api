@@ -1,9 +1,6 @@
 package com.petverse.domain.service;
 
-import com.petverse.domain.dto.PetCreateDTO;
-import com.petverse.domain.dto.PetResponseDTO;
-import com.petverse.domain.dto.PostCreateDTO;
-import com.petverse.domain.dto.PostResponseDTO;
+import com.petverse.domain.dto.*;
 import com.petverse.domain.entity.Pet;
 import com.petverse.domain.entity.Post;
 import com.petverse.domain.entity.User;
@@ -97,5 +94,93 @@ public class PostServiceTest {
         });
 
         assertEquals("Owner not found with id: " + dto.ownerId, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should throw exception when post does not exist")
+    void shouldThrowExceptionWhenPostNotExist() {
+        Long id = 999L;
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            postService.findById(id);
+        });
+
+        assertEquals("Post not found with id: " + id, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should get post by id")
+    void shouldGetPostById() {
+        PostCreateDTO dto = new PostCreateDTO();
+        dto.content = "Bom dia, amigos";
+        dto.petIds = petsTest.stream().map(p -> p.id).toList();
+        dto.ownerId = ownerId;
+
+        PostResponseDTO response = postService.create(dto);
+        postService.findById(response.id);
+
+        assertNotNull(response.id);
+        assertEquals(dto.content, response.content);
+        assertEquals(dto.petIds.size(), response.pets.size());
+        assertEquals(dto.ownerId, response.ownerId);
+    }
+
+    @Test
+    @DisplayName("Should get posts")
+    void shouldGetPosts() {
+        PostCreateDTO dto1 = new PostCreateDTO();
+        dto1.content = "Bom dia, amigos";
+        dto1.petIds = petsTest.stream().map(p -> p.id).toList();
+        dto1.ownerId = ownerId;
+
+        PostCreateDTO dto2 = new PostCreateDTO();
+        dto2.content = "Bom dia, amigos (segundo)";
+        dto2.petIds = petsTest.stream().map(p -> p.id).toList();
+        dto2.ownerId = ownerId;
+
+        PostResponseDTO responseDTO1 = postService.create(dto1);
+        PostResponseDTO responseDTO2 = postService.create(dto2);
+
+        List<PostResponseDTO> responseDTOS = postService.list();
+
+        assertEquals(2, responseDTOS.size());
+        assertTrue(responseDTOS.stream().anyMatch(p -> p.content.equals("Bom dia, amigos")));
+        assertTrue(responseDTOS.stream().anyMatch(p -> p.content.equals("Bom dia, amigos (segundo)")));
+        assertTrue(responseDTOS.stream().allMatch(p -> p.ownerId.equals(ownerId)));
+        assertTrue(responseDTOS.stream().allMatch(p -> p.active));
+    }
+
+    @Test
+    @DisplayName("Should thrown exception when post is not found soft deleted")
+    void shouldThrowExceptionWhenPosttNotFoundInSoftDeletePost() {
+        PostCreateDTO dto = new PostCreateDTO();
+        dto.content = "Bom dia, amigos";
+        dto.petIds = petsTest.stream().map(p -> p.id).toList();
+        dto.ownerId = ownerId;
+        PostResponseDTO created = postService.create(dto);
+
+        postService.delete(created.id);
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            postService.findById(created.id);
+        });
+
+        assertEquals("Post not found with id: " + created.id, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should update post successfully")
+    void shouldUpdatePostSuccessfully() {
+        PostCreateDTO createDTO = new PostCreateDTO();
+        createDTO.content = "Bom dia, amigos";
+        createDTO.petIds = petsTest.stream().map(p -> p.id).toList();
+        createDTO.ownerId = ownerId;
+        PostResponseDTO created = postService.create(createDTO);
+
+        PostUpdateDTO updateDTO = new PostUpdateDTO();
+        updateDTO.content = "Bom dia, amigos [EDITADO]";
+        PostResponseDTO updated = postService.update(created.id, updateDTO);
+
+        assertEquals(created.id, updated.id);
     }
 }

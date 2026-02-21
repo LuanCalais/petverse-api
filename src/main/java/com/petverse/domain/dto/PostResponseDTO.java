@@ -1,6 +1,5 @@
 package com.petverse.domain.dto;
 
-import com.petverse.domain.entity.Pet;
 import com.petverse.domain.entity.Post;
 
 import java.time.LocalDateTime;
@@ -11,7 +10,7 @@ public class PostResponseDTO {
     public Long id;
     public String content;
     public Long ownerId;
-    public List<Pet> pets;
+    public List<PetResponseDTO> pets;
     public LocalDateTime createdAt;
     public Boolean active;
     public LocalDateTime updatedAt;
@@ -27,6 +26,8 @@ public class PostResponseDTO {
         this.createdAt = post.createdAt;
         this.updatedAt = post.updatedAt;
         this.active = post.active;
-        this.pets = post.pets;
+        this.pets = post.pets != null
+                ? post.pets.stream().map(PetResponseDTO::new).toList()
+                : List.of();
     }
 }

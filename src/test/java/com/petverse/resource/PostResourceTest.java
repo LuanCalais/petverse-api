@@ -121,26 +121,86 @@ public class PostResourceTest {
     }
 
     @Test
-    @DisplayName("POST /api/posts should return 404 when owner not found")
+    @DisplayName("GET /api/posts should return post by id")
+    void shouldReturnPostById() {
+        Long postId = criarPostAuxiliar();
+
+        given()
+                .when()
+                .get("/api/posts/{id}", postId)
+                .then()
+                .statusCode(200)
+                .body("id", equalTo(postId.intValue()))
+                .body("content", equalTo("Bom dia, amigos"));
+
+    }
+
+    @Test
+    @DisplayName("GET /api/posts should return 404 when owner not found")
     void shouldReturn404WhenOwnerNotFound() {
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/posts/999")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    @DisplayName("GET /api/pets should return list of all posts")
+    void shouldReturnListOfAllPosts() {
+        criarPostAuxiliar();
+
+        given()
+                .when()
+                .get("api/posts")
+                .then()
+                .statusCode(200)
+                .body("size()", equalTo(1));
+    }
+
+    @Test
+    @DisplayName("DELETE /api/pets/{id} should return 404 when post not found")
+    void shouldReturn404WhenDeletingNonExistentPost() {
+        given()
+                .when()
+                .delete("/api/posts/9999")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    @DisplayName("DELETE /api/pets/{id} should delete post and return 204")
+    void shouldDeletePostAndReturn204() {
+        Long postId = criarPostAuxiliar();
+        given()
+                .when()
+                .delete("/api/posts/{id}", postId)
+                .then()
+                .statusCode(204);
+    }
+
+    private Long criarPostAuxiliar() {
         List<Long> petIds = petsTest.stream().map(p -> p.id).toList();
         String petIdsString = petIds.toString();
 
         String requestBody = String.format("""
                 {
-                    "content": "",
+                    "content": "Bom dia, amigos",
                     "petIds": %s,
                     "ownerId": %d
                 }
-                """, petIdsString, 999L);
+                """, petIdsString, ownerId);
 
-        given()
+        return given()
                 .contentType(ContentType.JSON)
                 .body(requestBody)
                 .when()
                 .post("/api/posts")
                 .then()
-                .statusCode(404);
+                .statusCode(201)
+                .extract()
+                .jsonPath()
+                .getLong("id");
     }
-
 }

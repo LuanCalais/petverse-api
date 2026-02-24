@@ -9,18 +9,22 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import java.util.List;
 
 @Path("/api/pets")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Tag(name = "Pet", description = "Pets endpoints")
 public class PetResource {
 
     @Inject
     PetService petService;
 
     @POST
+    @Operation(summary = "Create a new pet")
     public Response create(@Valid PetCreateDTO dto) {
         PetResponseDTO response = petService.create(dto);
         return Response.status(Response.Status.CREATED).entity(response).build();
@@ -28,12 +32,14 @@ public class PetResource {
 
     @PUT
     @Path("/{id}")
+    @Operation(summary = "Update pet")
     public PetResponseDTO update(@PathParam("id") Long id, @Valid PetUpdateDTO dto) {
         return petService.update(id, dto);
     }
 
     @DELETE
     @Path("/{id}")
+    @Operation(summary = "Delete pet by id")
     public Response delete(@PathParam("id") Long id) {
         petService.delete(id);
         return Response.noContent().build();
@@ -41,11 +47,13 @@ public class PetResource {
 
     @GET
     @Path("/{id}")
+    @Operation(summary = "Get pet by id")
     public PetResponseDTO findById(@PathParam("id") Long id) {
         return petService.findById(id);
     }
 
     @GET
+    @Operation(summary = "Get pets")
     public List<PetResponseDTO> listAll() {
         return petService.listAll();
     }

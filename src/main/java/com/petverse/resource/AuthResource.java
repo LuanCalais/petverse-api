@@ -14,7 +14,7 @@ import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-@Path("/auth")
+@Path("/api/auth")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Tag(name = "Auth", description = "Authentication endpoints")
@@ -24,7 +24,6 @@ public class AuthResource {
     AuthService authService;
 
     @POST
-    @Path("/register")
     @Operation(summary = "Register a new user")
     public Response register(@Valid RegisterRequestDTO dto) {
         AuthResponseDTO response = authService.register(dto);

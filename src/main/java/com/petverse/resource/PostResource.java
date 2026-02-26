@@ -12,7 +12,6 @@ import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Path("/api/posts")
@@ -56,8 +55,6 @@ public class PostResource {
     @GET
     @Operation(summary = "Get posts")
     public List<PostResponseDTO> listAll() {
-        List<PostResponseDTO> mock = new ArrayList<>();
-        mock.add(new PostResponseDTO());
-        return mock;
+        return postService.listAll();
     }
 }

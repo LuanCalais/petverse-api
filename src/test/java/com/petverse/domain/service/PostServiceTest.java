@@ -141,7 +141,7 @@ public class PostServiceTest {
         PostResponseDTO responseDTO1 = postService.create(dto1);
         PostResponseDTO responseDTO2 = postService.create(dto2);
 
-        List<PostResponseDTO> responseDTOS = postService.list();
+        List<PostResponseDTO> responseDTOS = postService.listAll();
 
         assertEquals(2, responseDTOS.size());
         assertTrue(responseDTOS.stream().anyMatch(p -> p.content.equals("Bom dia, amigos")));

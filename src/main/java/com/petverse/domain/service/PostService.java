@@ -66,7 +66,7 @@ public class PostService {
         post.active = false;
     }
 
-    public List<PostResponseDTO> list() {
+    public List<PostResponseDTO> listAll() {
         return Post.listActive()
                 .stream()
                 .map(PostResponseDTO::new)

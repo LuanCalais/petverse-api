@@ -124,9 +124,9 @@ public class PetResourceTest {
     @Test
     @DisplayName("GET /api/pets should return list of all pets")
     void shouldReturnListOfAllPets() {
-        criarPetAuxiliar("Rex", "DOG");
-        criarPetAuxiliar("Miau", "CAT");
-        criarPetAuxiliar("Tweety", "BIRD");
+        createPet("Rex", "DOG");
+        createPet("Miau", "CAT");
+        createPet("Tweety", "BIRD");
 
         given()
                 .when()
@@ -158,7 +158,7 @@ public class PetResourceTest {
     @Test
     @DisplayName("DELETE /api/pets/{id} should delete pet and return 204")
     void shouldDeletePetAndReturn204() {
-        Long petId = criarPetAuxiliar("Rex", "DOG");
+        Long petId = createPet("Rex", "DOG");
 
         given()
                 .when()
@@ -184,7 +184,7 @@ public class PetResourceTest {
     }
 
 
-    private Long criarPetAuxiliar(String name, String species) {
+    private Long createPet(String name, String species) {
         String requestBody = """
                 {
                     "name": "%s",

@@ -120,7 +120,7 @@ public class AuthServiceTest {
         dto.password = "senha123";
         dto.phone = "+5511999999999";
 
-        AuthResponseDTO response = authService.register(dto);
+        authService.register(dto);
 
         BusinessException exception = assertThrows(BusinessException.class, () -> {
             authService.me("sicranoDeTal@email.com");
